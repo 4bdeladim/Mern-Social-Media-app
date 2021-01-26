@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema
 
-
-const UserSchema = mongoose.Schema({
+const UserSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -12,7 +12,7 @@ const UserSchema = mongoose.Schema({
         min: 6,
         max: 15
     },
-    todo: [Object]
+    posts: [Object]
 });
 
 

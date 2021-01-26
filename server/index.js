@@ -8,11 +8,17 @@ const login = require('./auth/login')
 const URL = process.env.database_url ;
 const register = require('./auth/register')
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const logout = require('./auth/logout');
+
+
 app.use(cors());
 app.use(express.json());
-app.use('/user', posts);
 app.use('/login', login);
-app.use('/register', register)
+app.use('/register', register);
+app.use('/logout', logout);
+app.use(cookieParser())
+app.use('/user', posts)
 
 
 
