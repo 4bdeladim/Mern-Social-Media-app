@@ -5,7 +5,7 @@ const User = require('../models/user');
 const auth = require('../auth/middleware/auth');
 const getCookie = require('../auth/middleware/cookies');
 const jwt = require('jsonwebtoken')
-
+const uuid = require('uuid')
 
 
 
@@ -18,7 +18,7 @@ const getId = (token) => {
 //----------------------------->>
 
 //GET USER POSTS <:3
-router.get('/posts', auth, async (req, res) => {
+router.get('/user/posts', auth,  async (req, res) => {
     const id = getId(getCookie(req.headers.cookie))
     const { posts } = await User.findById(id)
     res.status(200).json(posts)
@@ -26,23 +26,44 @@ router.get('/posts', auth, async (req, res) => {
 
 
 //POST A NEW POST :-:
-router.post('/posts',  async (req, res) => {
-    const { descreption } = req.body 
-    const id = getId(getCookie(req.headers.cookie))
-    const user = await User.findById(id)
-    const newPost = await User.findByIdAndUpdate(id, {new: true},  { posts: { descreption: descreption}}, (err, model) => {
-        if(err){ 
-            res.status(400).json({message: 'Somthing went wrong'})
-        } 
-        else{ 
-            res.status(200).json(model)
-        } 
-    })
-    newPost.save()
-    res.json(user)
-   
+router.post('user/posts', auth,  async (req, res) => {
+    const { descreption } = await req.body 
+    if(!descreption || descreption.length === 0) res.json({message: 'Descreption cannot be empty'})
+    else {
+        const id = getId(getCookie(req.headers.cookie))
+        const user = await User.findById(id);
+        const newPost = {
+            id: uuid.v4() ,
+            descreption: descreption,
+            username: user.username
+        }
+        user.posts.push(newPost)
+        user.save()
+        res.json(user) 
+    }   
 })
 
+
+//DELETE a post -_- 
+router.delete('user/posts', auth, async (req, res) => {
+    const { ID } = req.body 
+    const id = getId(getCookie(req.headers.cookie))
+    const user = await User.findById(id);
+    const posts = user.posts
+    posts.splice(posts.findIndex(i => i.id === ID), 1)
+    user.save()
+    res.json(user)
+})
+
+
+//GET all posts 
+router.get('/posts', async (req, res) => {
+    const users = await User.find()
+    const posts = users.map(user => {
+        return user.posts
+    })
+    res.json(posts)
+})
 
 
 
