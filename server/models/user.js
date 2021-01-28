@@ -12,6 +12,10 @@ const UserSchema = new Schema({
         min: 6,
         max: 15
     },
+    name: {
+        type: String,
+        required: true,
+    },
     posts: [Object]
 });
 

@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 
 router.post('/', async (req, res) => {
-    const { username, password } = req.body ;
+    const { username, password, name } = req.body ;
     const salt = bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, 10)
     try {
@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
             if(user) res.status(409).json({ message: "This user is taken "})
             if(!user) {
                 const newUser = new User({
+                    name: name,
                     username: username,
                     password: hashedPassword
                 })
