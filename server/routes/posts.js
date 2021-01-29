@@ -52,7 +52,7 @@ router.delete('user/posts', auth, async (req, res) => {
     const posts = user.posts
     posts.splice(posts.findIndex(i => i.id === ID), 1)
     user.save()
-    res.json(user)
+    res.json({message: 'post deleted'})
 })
 
 

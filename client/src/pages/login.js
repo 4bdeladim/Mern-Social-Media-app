@@ -1,23 +1,13 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar'
-import { login } from '../redux/actions';
 
-const Login = () => {
+
+const Login = ({message, loginUser}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('')
-    const state = useSelector(state => state[3]);
-    const dispatch = useDispatch();
-
-    const checkLoginInfo = async () => {
-        await dispatch(login({
-            username: username,
-            password: password
-        }))
-        setMessage(state)  
-    }
-
+    
     
     return (
         <>
@@ -36,12 +26,17 @@ const Login = () => {
                     />
                 </div>
                 <div className="submit">
-                    <button type="submit" className='btn btn-primary mt-3'
-                        onClick={checkLoginInfo}
-                    >Login</button>
+                    <button
+                        onClick={loginUser}
+                    type="submit" className='btn btn-primary mt-3'>Login</button>
+                    <Link to='/posts'>
+                        <button
+                            onClick={loginUser}
+                        type="submit" className='btn btn-danger mt-3 ml-5'>Guest</button>
+                    </Link>
                 </div>
             </div>
-            {state}
+            {message}
         </>
     )
 }

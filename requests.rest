@@ -1,6 +1,0 @@
-POST http://localhost:7001/users/register
-
-{
-    "username": "Abdeladim",
-    "password": "dfsfgsdg"
-} 
