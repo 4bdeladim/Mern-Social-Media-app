@@ -2,11 +2,16 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar'
-
+import { useDispatch, useSelector } from 'react-redux';
+import { loginToAccount } from '../actions/auth';
+import { getMyPostsforAccess } from '../actions/posts';
 
 const Login = ({message, loginUser}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const authMessage = useSelector(state => state.auth.message);
+    const auth = useSelector(state => state.auth.auth)
     
     
     return (
@@ -26,17 +31,18 @@ const Login = ({message, loginUser}) => {
                     />
                 </div>
                 <div className="submit">
-                    <button
-                        onClick={loginUser}
+                    <button 
+                        onClick={() => dispatch(loginToAccount(username, password))}
                     type="submit" className='btn btn-primary mt-3'>Login</button>
                     <Link to='/posts'>
-                        <button
-                            onClick={loginUser}
-                        type="submit" className='btn btn-danger mt-3 ml-5'>Guest</button>
+                        <button type="submit" className='btn btn-danger mt-3 ml-5'>Guest</button>
                     </Link>
                 </div>
+                <h3 className="mt-4 alert-danger">
+                    {auth ? '' : authMessage }
+                </h3>
             </div>
-            {message}
+            
         </>
     )
 }

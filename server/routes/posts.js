@@ -27,15 +27,17 @@ router.get('/user/posts', auth,  async (req, res) => {
 
 //POST A NEW POST :-:
 router.post('/user/posts', auth,  async (req, res) => {
-    const { descreption } = await req.body 
-    if(!descreption || descreption.length === 0) res.json({message: 'Descreption cannot be empty'})
+    const { descreption, title } = await req.body 
+    if(!descreption || descreption.length === 0 || !title || title.length < 2) res.json({message: 'Descreption and title cannot be empty'})
     else {
         const id = getId(getCookie(req.headers.cookie))
         const user = await User.findById(id)
         const newPost = {
             id: uuid.v4() ,
             descreption: descreption,
-            username: user.username
+            title: title,
+            username: user.username,
+            name: user.name
         }
         user.posts.push(newPost)
         user.save()
@@ -45,7 +47,7 @@ router.post('/user/posts', auth,  async (req, res) => {
 
 
 //DELETE a post -_- 
-router.delete('user/posts', auth, async (req, res) => {
+router.delete('/user/posts', auth, async (req, res) => {
     const { ID } = req.body 
     const id = getId(getCookie(req.headers.cookie))
     const user = await User.findById(id);

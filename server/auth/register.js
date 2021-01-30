@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
     try {
         const userCheck = User.findOne({username}, (err, user) => {
-            if(user) res.status(409).json({ message: "This user is taken "})
+            if(user) res.json({ message: "This user is taken"})
             if(!user) {
                 const newUser = new User({
                     name: name,
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
                     password: hashedPassword
                 })
                 newUser.save()
-                res.status(200).json({message: "Account has been created "})
+                res.status(200).json({message: "Account has been created"})
             }
         })
     } catch (error) {
