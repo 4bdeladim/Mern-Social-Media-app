@@ -22,10 +22,9 @@ const Posts = () => {
     return (
         <>  
             <Navbar Next={auth ? 'Profile' : 'Login'} path={auth ? 'profile' : '/'} /> 
-            
             <div className="posts-container">
                 <div className="title">
-                    <h1 className="display-1">Posts</h1>
+                    <h1>Posts</h1>
                 </div>
                 <div className="posts">
                     {

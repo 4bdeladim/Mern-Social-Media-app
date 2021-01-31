@@ -1,0 +1,12 @@
+.posts-container {
+    display: flex ;
+    flex-direction: column ;
+
+}
+.title-field {
+    width: 100% ;
+    display: flex ;
+    flex-direction: row-reverse;
+    justify-content: space-around ;
+    align-items: center ;
+}

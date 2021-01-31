@@ -1,6 +1,7 @@
 let initialState = {
     posts: [],
-    myposts: []
+    myposts: [],
+    message: ''
 }
 export default (posts = initialState, action) => {
     switch (action.type) {
@@ -11,9 +12,15 @@ export default (posts = initialState, action) => {
             posts.myposts = action.payload
             return posts ;
         case 'POST_DELETED':
-            
-            console.log(action.payload)
-            return action.payload
+            posts.myposts = action.payload.posts
+            return posts
+        case 'POST_ADDED':
+            posts.myposts = action.payload.posts
+            posts.message = action.payload.message
+            return posts
+        case 'POST_NOT_ADDED':
+            posts.message = action.payload
+            return posts
         default:
             return posts ;
     }

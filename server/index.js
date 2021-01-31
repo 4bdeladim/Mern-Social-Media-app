@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 7021 ;
 const posts = require('./routes/posts');
 const login = require('./auth/login')
-const URL = process.env.database_url ;
+
 const register = require('./auth/register')
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 
 
-mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true },  () => {
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true },  () => {
     console.log("Mongo connected !")
 });
 

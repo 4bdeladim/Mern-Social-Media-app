@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 
 
 const Logout = () => {
+    
     return (
         <div>
             <Navbar Next="Login" path='/' />

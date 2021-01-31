@@ -30,3 +30,12 @@ export const deleteapost = (id) => async (dispatch) => {
         console.log(err)
     }
 }
+
+export const addApost = (title, descreption) => async (dispatch) => {
+    try {
+        const { data } = await api.addPost(title, descreption);
+        dispatch({type: 'POST_ADDED', payload: data})
+    } catch (error) {
+        dispatch({type: 'POST_NOT_ADDED', payload: 'Somthing went wrong'})
+    }
+}

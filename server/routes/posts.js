@@ -30,18 +30,24 @@ router.post('/user/posts', auth,  async (req, res) => {
     const { descreption, title } = await req.body 
     if(!descreption || descreption.length === 0 || !title || title.length < 2) res.json({message: 'Descreption and title cannot be empty'})
     else {
-        const id = getId(getCookie(req.headers.cookie))
-        const user = await User.findById(id)
-        const newPost = {
-            id: uuid.v4() ,
-            descreption: descreption,
-            title: title,
-            username: user.username,
-            name: user.name
+        try {
+            const id = getId(getCookie(req.headers.cookie))
+            const user = await User.findById(id)
+            const newPost = {
+                id: uuid.v4() ,
+                descreption: descreption,
+                title: title,
+                username: user.username,
+                name: user.name,
+                date: Date.now()
+            }
+            user.posts.push(newPost)
+            user.save() 
+            res.json({posts: user.posts}) 
+        } catch (error) {
+            res.status(404)
         }
-        user.posts.push(newPost)
-        user.save()
-        res.json(user) 
+        
     }   
 })
 
@@ -54,7 +60,8 @@ router.delete('/user/posts', auth, async (req, res) => {
     const posts = user.posts
     posts.splice(posts.findIndex(i => i.id === ID), 1)
     user.save()
-    res.json({message: 'post deleted'})
+    const newPosts = await user.posts
+    res.json({message: 'post deleted', posts: newPosts})
 })
 
 

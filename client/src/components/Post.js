@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { deleteapost } from '../actions/posts';
 import '../styles/post.css'
-
+import ErrorModal from './ErrorModal'
 
 const Post = ({username, description, title, btn, btnID}) => {
     const [id, setid] = useState('');

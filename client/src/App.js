@@ -8,12 +8,14 @@ import Register from './pages/register'
 import Profile from './pages/profile';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginToAccount } from './actions/auth';
-import { getMyPostsforAccess } from './actions/posts'
+import { addApost, getMyPostsforAccess } from './actions/posts'
+import ModalComponent from './components/Modal';
 import Logout from './pages/logout';
 
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth.auth)
+  const message = useSelector(state => state.posts.message)
   useEffect(() => {
     dispatch(getMyPostsforAccess())
   }, [])
