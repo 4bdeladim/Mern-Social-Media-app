@@ -21,7 +21,7 @@ const Profile = () => {
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container-fluid">
-            <Link to="posts" className="navbar-brand">Feed</Link>
+            <Link to='/feed' className="navbar-brand">Feed</Link>
             <Link to="/logout" >
             <button
                 onClick={logoutfromtheaccount}

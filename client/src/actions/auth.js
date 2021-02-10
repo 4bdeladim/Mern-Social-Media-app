@@ -2,7 +2,8 @@ import * as api from '../api'
 
 export const loginToAccount = (username, password) => async (dispatch) => {
     try {
-        const  { data }  = await api.login(username, password);
+        const { data } = await api.login(username, password);
+        //THIS SECOND LINE WILL WAIT UNTIL THE DATA COME,
         dispatch({ type: 'LOGIN_SUCCESS', payload: true })
     } catch (error) {
         dispatch({ type: 'LOGIN_ERROR', payload: false})
