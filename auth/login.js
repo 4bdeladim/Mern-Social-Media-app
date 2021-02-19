@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
                         { id: user.id },
                         jwtKey,
                         (err, token) => {
-                            res.cookie(jwtCookie, token).json({
+                            res.cookie(jwtCookie, token, { httpOnly: true, maxAge:( 60 * 100 * 60 * 60 ) / 2}).json({
                                 message: 'Login success'  
                             })
 

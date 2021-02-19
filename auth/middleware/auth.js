@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
-const getCookie = require('./cookies')
+
 
 
 
 const auth = (req, res, next) => {
     
-    const token = getCookie(req.headers.cookie)
+    const token = req.headers.cookie
     if(!token) return res.status(401).json({ msg: 'No token, auth denided'});
     try {
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        const decoded = jwt.verify(token.split('=')[1] , process.env.JWT_KEY);
         req.user = decoded 
         next();
     } catch (error) {

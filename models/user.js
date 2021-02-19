@@ -16,7 +16,18 @@ const UserSchema = new Schema({
         min: 6,
         max: 15
     },
-    posts: [Object]
+    posts: [{
+        poster: String,
+        descreption: String,
+        title: String,
+        username: String,
+        name: String,
+        date: Date,
+        likes: [String],
+        comments: [String],
+    }],
+    likedPosts: [Object],
+    commentedPost: [Object]
 });
 
 

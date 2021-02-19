@@ -3,9 +3,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const auth = require('../auth/middleware/auth');
-const getCookie = require('../auth/middleware/cookies');
 const jwt = require('jsonwebtoken')
-const uuid = require('uuid')
+const uuid = require('uuid');
+const { route } = require('../auth/login');
 
 
 
@@ -19,7 +19,8 @@ const getId = (token) => {
 
 //GET USER POSTS <:3
 router.get('/user/posts', auth,  async (req, res) => {
-    const id = getId(getCookie(req.headers.cookie))
+    const token = req.headers.cookie.split('=')[1]
+    const id = getId(token)
     const { posts } = await User.findById(id)
     res.status(200).json(posts)
 });
@@ -31,15 +32,17 @@ router.post('/user/posts', auth,  async (req, res) => {
     if(!descreption || descreption.length === 0 || !title || title.length < 2) res.json({message: 'Descreption and title cannot be empty'})
     else {
         try {
-            const id = getId(getCookie(req.headers.cookie))
+            const id = getId(req.headers.cookie.split('=')[1])
             const user = await User.findById(id)
             const newPost = {
-                id: uuid.v4() ,
+                poster: user.id,
                 descreption: descreption,
                 title: title,
                 username: user.username,
                 name: user.name,
-                date: Date.now()
+                date: Date.now(),
+                likes: [],
+                comments: [],
             }
             user.posts.push(newPost)
             user.save() 
@@ -54,14 +57,55 @@ router.post('/user/posts', auth,  async (req, res) => {
 
 //DELETE a post -_- 
 router.delete('/user/posts', auth, async (req, res) => {
+    const token = req.headers.cookie.split('=')[1]
     const { ID } = req.body 
-    const id = getId(getCookie(req.headers.cookie))
+    const id = getId(token)
     const user = await User.findById(id);
     const posts = user.posts
     posts.splice(posts.findIndex(i => i.id === ID), 1)
     user.save()
     const newPosts = await user.posts
     res.json({message: 'post deleted', posts: newPosts})
+})
+
+
+//get a post by id 
+router.get('/posts/:id', async (req, res) => {
+    const users = await User.find()
+    const posts = users.map(user => {
+        return user.posts
+    })
+    const post = posts.filter(post => post.id !== req.params.id)
+    res.json(post[0])
+})
+
+
+//like a post :<3
+router.put('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
+    const token = req.headers.cookie.split('=')[1]
+    const id = getId(token)
+    const user = await User.findById(req.params.user_id)
+    const posts = await user.posts
+    const post = await posts.filter((post) => post.id === req.params.id)
+    post[0].likes.push(id)
+    await user.save()
+    res.json(post)
+})
+
+
+//unlike a post 
+router.delete('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
+    const token = req.headers.cookie.split('=')[1];
+    const unliker = getId(token);
+    const user = await User.findById(req.params.user_id);
+    const posts = await user.posts;
+    const post = await posts.filter((post) => post.id === req.params.id);
+    const index = post[0].likes.indexOf(unliker);
+    if (index > -1) {
+        post[0].likes.splice(index, 1);
+    }
+    await user.save()
+    res.json(post)
 })
 
 
