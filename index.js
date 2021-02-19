@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 7021 ;
-const posts = require('./routes/posts');
+const posts = require('./routes/posts/posts');
 const login = require('./auth/login')
 const register = require('./auth/register')
 const cors = require('cors');
@@ -11,6 +11,8 @@ const cookieParser = require('cookie-parser');
 const logout = require('./auth/logout');
 const jwt = require('jsonwebtoken');
 const path = require('path')
+const reactions = require('./routes/posts/reactions');
+
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -22,6 +24,7 @@ app.use('/register', register);
 app.use('/logout', logout);
 app.use(cookieParser())
 app.use('/', posts)
+app.use('/', reactions)
 app.use((req, res, next) => {	
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');    
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');    

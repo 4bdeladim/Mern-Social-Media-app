@@ -1,11 +1,11 @@
 require('dotenv').config()
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
-const auth = require('../auth/middleware/auth');
+const User = require('../../models/user');
+const auth = require('../../auth/middleware/auth');
 const jwt = require('jsonwebtoken')
 const uuid = require('uuid');
-const { route } = require('../auth/login');
+const { route } = require('../../auth/login');
 
 
 
@@ -77,35 +77,6 @@ router.get('/posts/:id', async (req, res) => {
     })
     const post = posts.filter(post => post.id !== req.params.id)
     res.json(post[0])
-})
-
-
-//like a post :<3
-router.put('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
-    const token = req.headers.cookie.split('=')[1]
-    const id = getId(token)
-    const user = await User.findById(req.params.user_id)
-    const posts = await user.posts
-    const post = await posts.filter((post) => post.id === req.params.id)
-    post[0].likes.push(id)
-    await user.save()
-    res.json(post)
-})
-
-
-//unlike a post 
-router.delete('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
-    const token = req.headers.cookie.split('=')[1];
-    const unliker = getId(token);
-    const user = await User.findById(req.params.user_id);
-    const posts = await user.posts;
-    const post = await posts.filter((post) => post.id === req.params.id);
-    const index = post[0].likes.indexOf(unliker);
-    if (index > -1) {
-        post[0].likes.splice(index, 1);
-    }
-    await user.save()
-    res.json(post)
 })
 
 
