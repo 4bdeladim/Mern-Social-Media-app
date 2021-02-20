@@ -24,7 +24,7 @@ const UserSchema = new Schema({
         name: String,
         date: Date,
         likes: [String],
-        comments: [String],
+        comments: [Object],
     }],
     likedPosts: [Object],
     commentedPost: [Object]

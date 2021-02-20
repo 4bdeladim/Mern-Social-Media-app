@@ -68,10 +68,36 @@ router.delete('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
 
 //get people who like a post :<3
 router.get('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
-    
-    res.json()
+    const user = await User.findById(req.params.user_id);
+    const posts = await user.posts;
+    const post = await posts.filter((post) => post.id === req.params.id);
+    res.json(post[0].likes)
 })
 
+//comment a post 
+router.put('/users/:user_id/posts/:id/comment', auth, async (req, res) => {
+    const token = req.headers.cookie.split('=')[1];
+    const { comment } = req.body
+    if(!comment || comment.length < 1) res.json({message: `comment can't be less than 1 letter`})
+    const id = await getId(token);
+    const commenter = await User.findById(id)
+    const user = await User.findById(req.params.user_id)
+    const posts = user.posts
+    const post = await posts.filter((post) => post.id === req.params.id);
+    post[0].comments.push({
+        user: commenter.id,
+        descreption: comment
+    })
+    await user.save()
+    res.json(post[0])
+})
 
+//get comments on post 
+router.get('/users/:user_id/posts/:id/comment', auth, async (req, res) => {
+    const user = await User.findById(req.params.user_id);
+    const posts = await user.posts;
+    const post = await posts.filter((post) => post.id === req.params.id);
+    res.json(post[0].comments)
+})
 
 module.exports = router 
