@@ -1,0 +1,19 @@
+.single-post-container {
+    width: 320px ;
+    margin: 0 auto ;
+    border: #303030 1px solid ;
+    margin-top: 3rem ;
+    border-radius: 4px ;
+}
+
+.username {
+    color: rgb(204, 204, 204);
+    font-weight: 400 ;
+}
+
+.comment {
+    font-weight: 600;
+}
+.table {
+    border-bottom: #ffff solid 1px ;
+}

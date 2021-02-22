@@ -25,16 +25,14 @@ router.post('/', (req, res) => {
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
                     if(!isMatch) return res.status(400).json({ msg: 'invalid cre'})
-
                     jwt.sign(
                         { id: user.id },
                         jwtKey,
                         (err, token) => {
                             res.cookie(jwtCookie, token, { httpOnly: true, maxAge:( 60 * 100 * 60 * 60 ) / 2}).json({
-                                message: 'Login success'  
+                                message: 'Login success',
+                                id: user.id
                             })
-
-
                         }
                     )
                 })

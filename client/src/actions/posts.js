@@ -39,3 +39,11 @@ export const addApost = (title, descreption) => async (dispatch) => {
         dispatch({type: 'POST_NOT_ADDED', payload: 'Somthing went wrong'})
     }
 }
+export const getonepost = (id) => async (dispatch) => {
+    try {
+        const { data } = await api.getpostbyid(id)
+        dispatch({type: 'GET_POST_SUCCESS', payload: data})
+    } catch (error) {
+        dispatch({type: 'GET_POST_ERROR', payload: 'Somthing went wrong'})
+    }
+}

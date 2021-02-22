@@ -13,9 +13,11 @@ const Profile = () => {
         dispatch(getMyPostsforAccess())
     })
     const posts = useSelector(state => state.posts.myposts)
+    const post = useSelector(state => state.posts.post)
     const logoutfromtheaccount =  async () => {
         dispatch(logout());
     }
+    
 
     return (
         <>
@@ -36,8 +38,8 @@ const Profile = () => {
                 </div>
                 <div className="posts">
                     {
-                        posts.map((post) => (
-                            <Post btnID={post.id} btn="delete" name='You' username={post.username} title={post.title} description={post.descreption}  key={post.id} /> 
+                        posts.map((post, index) => (
+                            <Post path={`/profile/posts/${post._id}`} likes={post.likes.length} btnID={post._id} btn="delete" name='You' username={post.username} title={post.title} description={post.descreption}  key={post.id} /> 
                         ))
                     }
                 </div>
