@@ -22,9 +22,10 @@ router.get('/user/posts', auth,  async (req, res) => {
     const token = req.headers.cookie.split('=')[1]
     const id = getId(token)
     const { posts } = await User.findById(id)
+    const user = await User.findById(id)
     res.status(200).json({
         posts: posts,
-        id: id
+        username: user.username
     })
 });
 
@@ -87,6 +88,7 @@ router.get('/posts/:id', async (req, res) => {
     const post = newposts.filter(post => {
         return post.id === req.params.id
     })
+
     res.json(post)
 })
 

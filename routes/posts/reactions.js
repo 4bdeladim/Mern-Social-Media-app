@@ -19,14 +19,25 @@ const getId = (token) => {
 
 
 //like a post :<3
-router.put('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
+router.put('/posts/:id/likes', auth, async (req, res) => {
     const token = req.headers.cookie.split('=')[1];
     const id = await getId(token);
     const liker = await User.findById(id)
-    const user = await User.findById(req.params.user_id);
-    const posts = await user.posts;
-    const post = await posts.filter((post) => post.id === req.params.id);
-    post[0].likes.push(id);
+    const users = await User.find()
+    const posts = users.map(user => {
+        return user.posts
+    })
+    const newposts = []
+    for(i = 0 ; i < posts.length ; i++) {
+        for(j=0; j<posts[i].length; j++) {
+            newposts.push(posts[i][j])
+        }
+    }
+    const post =  newposts.filter(post => {
+        return post.id === req.params.id
+    })
+    const user = await User.findById(post[0].poster);
+    post[0].likes.push(liker.username);
     post[0].likes = [...new Set(post[0].likes)];
     liker.likedPosts.push({
         post: req.params.id,
@@ -41,20 +52,32 @@ router.put('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
     liker.likedPosts = filteredArr
     await user.save()
     await liker.save()
-    res.json(liker)
+    res.json(post)
 })
 
 
 //unlike a post 
-router.delete('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
+router.delete('/posts/:id/likes', auth, async (req, res) => {
+    
     const token = req.headers.cookie.split('=')[1];
     const unlikerID = getId(token);
     const unliker = await User.findById(unlikerID);
     const index2 =  unliker.likedPosts.findIndex(x => x.post === req.params.id);
-    const user = await User.findById(req.params.user_id);
-    const posts = await user.posts;
-    const post = await posts.filter((post) => post.id === req.params.id);
-    const index = post[0].likes.indexOf(unliker);
+    const users = await User.find()
+    const posts = users.map(user => {
+        return user.posts
+    })
+    const newposts = []
+    for(i = 0 ; i < posts.length ; i++) {
+        for(j=0; j<posts[i].length; j++) {
+            newposts.push(posts[i][j])
+        }
+    }
+    const post =  newposts.filter(post => {
+        return post.id === req.params.id
+    })
+    const user = await User.findById(post[0].poster);
+    const index = post[0].likes.indexOf(unliker.username);
     if (index > -1) {
         post[0].likes.splice(index, 1);
     }
@@ -63,11 +86,11 @@ router.delete('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
     }
     await unliker.save()
     await user.save()
-    res.json(unliker)
+    res.json(post)
 })
 
 //get people who like a post :<3
-router.get('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
+router.get('/posts/:id/likes', auth, async (req, res) => {
     const user = await User.findById(req.params.user_id);
     const posts = await user.posts;
     const post = await posts.filter((post) => post.id === req.params.id);
@@ -75,27 +98,41 @@ router.get('/users/:user_id/posts/:id/likes', auth, async (req, res) => {
 })
 
 //comment a post 
-router.put('/users/:user_id/posts/:id/comment', auth, async (req, res) => {
+router.put('/posts/:id/comments', auth, async (req, res) => {
     const token = req.headers.cookie.split('=')[1];
     const { comment } = req.body
     if(!comment || comment.length < 1) res.json({message: `comment can't be less than 1 letter ${comment}`})
     else {
         const id = await getId(token);
         const commenter = await User.findById(id)
-        const user = await User.findById(req.params.user_id)
-        const posts = user.posts
-        const post = await posts.filter((post) => post.id === req.params.id);  
-        await post[0].comments.push({
+        const users = await User.find()
+        const posts = users.map(user => {
+            return user.posts
+        })
+        const newposts = []
+        for(i = 0 ; i < posts.length ; i++) {
+            for(j=0; j<posts[i].length; j++) {
+                newposts.push(posts[i][j])
+            }
+        }
+        const post = newposts.filter(post => {
+            return post.id === req.params.id
+        })
+        const user = await User.findById(post[0].poster)
+        const newPost = await user.posts.filter(post => {
+            return post.id === req.params.id
+        })
+        await newPost[0].comments.push({
             user: commenter.username,
             descreption: comment
         })
         await user.save()
-        res.json({message: 'Comment posted'})
+        res.json(newPost[0])
     }
 })
 
 //get comments on post 
-router.get('/users/:user_id/posts/:id/comment', auth, async (req, res) => {
+router.get('posts/:id/comments', auth, async (req, res) => {
     const user = await User.findById(req.params.user_id);
     const posts = await user.posts;
     const post = await posts.filter((post) => post.id === req.params.id);

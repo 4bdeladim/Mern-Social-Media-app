@@ -17,3 +17,9 @@
 .table {
     border-bottom: #ffff solid 1px ;
 }
+
+.comment-grp {
+    width: 320px ;
+    margin: 0 auto;
+   
+}

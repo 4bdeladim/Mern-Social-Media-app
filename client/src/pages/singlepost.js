@@ -3,18 +3,21 @@ import '../styles/singlepost.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom'
 import { getonepost } from '../actions/posts';
+import { comment } from '../actions/reactions';
 const Singlepost = () => {
     const location = useLocation();
     const post = useSelector(state => state.posts.post);
+    const [Xcomment, XsetComment] = useState('')
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(getonepost(location.pathname.split('/')[2]))
+        dispatch(getonepost(location.pathname.split('/').reverse()[0]))
     }, [])
     
 
     
     return (
         <>
+            
         {
             post.length < 1 ? (
                 <h1>loading</h1>
@@ -25,11 +28,10 @@ const Singlepost = () => {
                     </div>
                     <div className="card-body">
                         <h5 className="card-title">{post.descreption}</h5>
-                        <p className="card-text">{post.date}</p>
+                        <p className="card-text">{post.date.split('T')[0]}</p>
                     </div>
                     <div className="card-footer">
                         <div className="row justify-content-between align-items-center">
-                            
                             <h3 className="numbers-likes">
                             
                             </h3>
@@ -58,6 +60,15 @@ const Singlepost = () => {
                 </div>
             )
         }
+        <div className="input-group mb-3 mt-3 comment-grp">
+            <button className="btn btn-outline-danger" type="button"
+                onClick={() => dispatch(comment(post._id, Xcomment))}
+            >Comment</button>
+            <input 
+                onChange={(e) => XsetComment(e.target.value)}
+            
+            type="text" className="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" />
+        </div>
         </>
     )
 }

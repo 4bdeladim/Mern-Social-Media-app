@@ -39,7 +39,7 @@ const Profile = () => {
                 <div className="posts">
                     {
                         posts.map((post, index) => (
-                            <Post path={`/profile/posts/${post._id}`} likes={post.likes.length} btnID={post._id} btn="delete" name='You' username={post.username} title={post.title} description={post.descreption}  key={post.id} /> 
+                            <Post path={`/profile/posts/${post._id}`} likes={post.likes.length} btnID={post._id} btn="delete" name='You' username={post.username} title={post.title} description={post.descreption}  key={post._id} /> 
                         ))
                     }
                 </div>

@@ -4,7 +4,7 @@ let initialState = {
     posts: [],
     myposts: [],
     message: '',
-    id: '',
+    username: '',
     comment: '',
     commentMessage: '',
     post: []
@@ -16,7 +16,7 @@ export default (posts = initialState, action) => {
             return posts ;
         case 'FETCH_MY_POSTS_SUCCESS':
             posts.myposts = action.payload.posts
-            posts.id = action.payload.id
+            posts.username = action.payload.username
             return posts ;
         case 'POST_DELETED':
             posts.myposts = action.payload.posts
@@ -29,7 +29,7 @@ export default (posts = initialState, action) => {
             posts.message = action.payload
             return posts
         case 'COMMENT_SUCCESS':
-            posts.commentMessage = action.payload
+            posts.post = action.payload
             return posts
         case 'COMMENT_ERROR':
             posts.commentMessage = action.payload
