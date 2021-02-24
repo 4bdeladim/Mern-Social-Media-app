@@ -14,10 +14,7 @@ const path = require('path')
 const reactions = require('./routes/posts/reactions');
 
 
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 app.use('/login', login);
 app.use('/register', register);
