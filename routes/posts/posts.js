@@ -74,7 +74,7 @@ router.delete('/user/posts', auth, async (req, res) => {
 
 
 //get a post by id 
-router.get('/posts/:id', async (req, res) => {
+router.get('/posts/:id', auth, async (req, res) => {
     const users = await User.find()
     const posts = users.map(user => {
         return user.posts
@@ -94,7 +94,7 @@ router.get('/posts/:id', async (req, res) => {
 
 
 //GET all posts 
-router.get('/posts', async (req, res) => {
+router.get('/posts', auth, async (req, res) => {
     const users = await User.find()
     const posts = users.map(user => {
         return user.posts

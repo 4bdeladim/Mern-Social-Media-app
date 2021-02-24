@@ -33,36 +33,30 @@ router.put('/posts/:id/likes', auth, async (req, res) => {
             newposts.push(posts[i][j])
         }
     }
-    const post =  newposts.filter(post => {
+    const post = newposts.filter(post => {
         return post.id === req.params.id
     })
-    const user = await User.findById(post[0].poster);
-    post[0].likes.push(liker.username);
-    post[0].likes = [...new Set(post[0].likes)];
-    liker.likedPosts.push({
-        post: req.params.id,
-        poster: req.params.user_id
+    const user = await User.findById(post[0].poster)
+    const newPost = await user.posts.filter(post => {
+        return post.id === req.params.id
     })
-    const seen = new Set();
-    const filteredArr = liker.likedPosts.filter(el => {
-        const duplicate = seen.has(el.id);
-        seen.add(el.id);
-        return !duplicate;
-    });
-    liker.likedPosts = filteredArr
+    await newPost[0].likes.push(liker.username)
+    newPost[0].likes = [...new Set(newPost[0].likes)];
+    if(liker.likedPosts.indexOf(req.params.id) < 0) {
+        liker.likedPosts.push(req.params.id)
+    }
     await user.save()
     await liker.save()
-    res.json(post)
+    res.json(newPost[0])
 })
 
 
 //unlike a post 
 router.delete('/posts/:id/likes', auth, async (req, res) => {
-    
+
     const token = req.headers.cookie.split('=')[1];
-    const unlikerID = getId(token);
-    const unliker = await User.findById(unlikerID);
-    const index2 =  unliker.likedPosts.findIndex(x => x.post === req.params.id);
+    const id = await getId(token);
+    const unliker = await User.findById(id)
     const users = await User.find()
     const posts = users.map(user => {
         return user.posts
@@ -73,20 +67,25 @@ router.delete('/posts/:id/likes', auth, async (req, res) => {
             newposts.push(posts[i][j])
         }
     }
-    const post =  newposts.filter(post => {
+    const post = newposts.filter(post => {
         return post.id === req.params.id
     })
-    const user = await User.findById(post[0].poster);
-    const index = post[0].likes.indexOf(unliker.username);
+    const user = await User.findById(post[0].poster)
+    const newPost = await user.posts.filter(post => {
+        return post.id === req.params.id
+    })
+    const index2 =  unliker.likedPosts.indexOf(req.params.id)
+    const index = newPost[0].likes.indexOf(unliker.username);
     if (index > -1) {
-        post[0].likes.splice(index, 1);
+        newPost[0].likes.splice(index, 1);
     }
     if (index2 > -1) {
-        unliker.likedPosts.splice(index2, 1);
+        unliker.likedPosts.splice(index2, 1);   
     }
     await unliker.save()
     await user.save()
-    res.json(post)
+    res.json(newPost[0])
+    
 })
 
 //get people who like a post :<3

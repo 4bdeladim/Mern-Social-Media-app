@@ -14,3 +14,5 @@ export const deletePost = (id) => axios.delete(`${url}user/posts`, {ID: id});
 export const addPost = (title, descreption) => axios.post(`${url}user/posts`, {title: title, descreption: descreption});
 export const commentOnApost = (postID, comment) => axios.put(`${url}posts/${postID}/comments`, {comment: comment})
 export const getpostbyid = (id) => axios.get(`${url}posts/${id}`)
+export const like = (id) => axios.put(`${url}posts/${id}/likes`)
+export const unlike = (id) => axios.delete(`${url}posts/${id}/likes`)

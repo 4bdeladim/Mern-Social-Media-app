@@ -3,16 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteapost } from '../actions/posts';
 import '../styles/post.css'
 import ErrorModal from './ErrorModal'
-import { AiTwotoneDislike, AiTwotoneLike } from 'react-icons/ai'
-import { comment } from '../actions/reactions';
+import { AiFillDislike, AiFillLike, AiTwotoneDislike, AiTwotoneLike } from 'react-icons/ai'
+import { comment, like, unlike } from '../actions/reactions';
 import { Link } from 'react-router-dom'
 
 
 
 
-const Post = ({username, description, title, btn, path, likes, licked, poster, postid, commentfun, btnID }) => {
+const Post = ({username, description, title, btn, path, likes, licked, postid}) => {
     const dispatch = useDispatch()
+    const [Xcomment, Xsetcomment] = useState('')
     
+
     
     
     return (
@@ -42,6 +44,27 @@ const Post = ({username, description, title, btn, path, likes, licked, poster, p
                             )
                         }
                     </h3>
+                    <div className="mr-3">
+                        {
+                            licked ? (
+                                <AiFillDislike 
+                                onClick={() => dispatch(unlike(postid))}
+                                className="like-btn" />
+                            ) : (
+                                <AiFillLike 
+                                    onClick={() => dispatch(like(postid))}
+                                    className="like-btn "
+                                />
+                            )
+                        }
+                    </div>
+                </div>
+                <div className="input-group mb-3 mt-3">
+                <button
+                onClick={(e) => dispatch(comment(e.target.id, Xcomment))} className="btn btn-outline-danger" type="button" id={postid} >Comment</button>
+                <input
+                    onChange={(e) => Xsetcomment(e.target.value)}
+                type="text" className="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" />
                 </div>
             </div>
         </div>

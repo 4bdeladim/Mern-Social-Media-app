@@ -28,7 +28,7 @@ function App() {
         auth ? <Route path='/profile' component={Profile} exact /> : ''
       }
       {
-        auth ? <Route path='/feed' component={Posts} exact />  : <Route path='/posts' component={Posts} exact /> 
+        auth ? <Route path='/feed' component={Posts} exact />  : ''
       }
       {
         auth ? '' : <Route path='/register' component={Register} exact /> 

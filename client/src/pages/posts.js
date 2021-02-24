@@ -8,7 +8,7 @@ import '../styles/posts.css'
 const Posts = () => {
     const auth = useSelector(state => state.auth.auth)
     const dispatch = useDispatch()
-    const post = useSelector(state => state.posts.post)
+    const username = useSelector(state => state.posts.username)
     useEffect(() => {
         dispatch(getPosts());
     }, [])
@@ -32,7 +32,17 @@ const Posts = () => {
                 <div className="posts">
                     {
                         newPosts.map((post, index) => (
-                            <Post path={`/feed/${post._id}`} poster={post.poster} postid={post._id} likes={post.likes.length} btn={'like-btn'} btnID={post._id} name={post.name} title={post.title} username={post.username} description={post.descreption}  key={post._id} /> 
+                            
+                            <Post
+                                licked={
+                                    post.likes.indexOf(username) !== -1 ? (
+                                        true   
+                                    ) : (
+                                        false
+                                    )
+                                } 
+                            path={`/feed/${post._id}`} poster={post.poster} postid={post._id} likes={post.likes.length} btn={'like-btn'} btnID={post._id} name={post.name} title={post.title} username={post.username} description={post.descreption}  key={post._id} /> 
+                            
                         ))
                     }
                 </div>

@@ -34,6 +34,20 @@ export default (posts = initialState, action) => {
         case 'COMMENT_ERROR':
             posts.commentMessage = action.payload
             return posts
+        case 'LIKE_SUCCESS':
+            if(posts.post._id === action.payload._id) {
+                posts.post = action.payload
+            }
+            return posts
+        case 'LIKE_ERROR':
+            return posts
+        case 'UNLIKE_SUCCESS':
+            if(posts.post._id === action.payload._id) {
+                posts.post = action.payload
+            }
+            return posts
+        case 'UNLIKE_ERROR':
+            return posts
         case 'GET_POST_SUCCESS':
             posts.post = action.payload[0]
             return posts

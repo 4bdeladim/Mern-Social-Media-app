@@ -34,9 +34,6 @@ const Login = ({message, loginUser}) => {
                     <button 
                         onClick={() => dispatch(loginToAccount(username, password))}
                     type="submit" className='btn btn-primary mt-3'>Login</button>
-                    <Link to='/posts'>
-                        <button type="submit" className='btn btn-danger mt-3 ml-5'>Guest</button>
-                    </Link>
                 </div>
                 <h3 className="mt-4 alert-danger">
                     {auth ? '' : authMessage }
